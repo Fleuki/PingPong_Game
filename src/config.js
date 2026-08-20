@@ -74,3 +74,6 @@ export const COLORS = {
   ball: '#ffffff',
   shadow: 'rgba(0, 0, 0, 0.16)',
 };
+
+// Общая утилита: используется и в физике, и в ИИ.
+export const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);

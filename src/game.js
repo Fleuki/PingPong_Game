@@ -1,7 +1,7 @@
 // Ядро игры: состояние матча, физика мяча (фиксированный шаг + swept collision),
 // удары по ракетке, подачи и подсчёт очков.
 
-import { CONFIG, TABLE } from './config.js';
+import { CONFIG, TABLE, clamp } from './config.js';
 import { sfx } from './audio.js';
 import { createAi, setAiDifficulty, resetAi, updateAi } from './ai.js';
 import { createEffects, updateEffects, spawnHitParticles, spawnWallParticles, flashScore } from './effects.js';
@@ -14,8 +14,6 @@ export const STATE = {
   PAUSE: 'pause',
   OVER: 'over',
 };
-
-const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);
 
 function createPaddle(isPlayer) {
   const r = CONFIG.PADDLE_R;

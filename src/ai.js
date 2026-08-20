@@ -1,7 +1,7 @@
 // Соперник (дизайн-документ, п. 6): предсказание траектории, задержка реакции,
 // ограниченная скорость ракетки и правдоподобная ошибка вместо случайных промахов.
 
-import { CONFIG, TABLE, DIFFICULTY } from './config.js';
+import { CONFIG, TABLE, DIFFICULTY, clamp } from './config.js';
 
 export function createAi() {
   return {
@@ -92,8 +92,4 @@ export function updateAi(game, dt) {
   const dy = clamp(brain.targetY - paddle.y, -maxStep * 0.7, maxStep * 0.7);
   paddle.x = clamp(paddle.x + dx, paddle.minX, paddle.maxX);
   paddle.y = clamp(paddle.y + dy, paddle.minY, paddle.maxY);
-}
-
-function clamp(v, min, max) {
-  return v < min ? min : v > max ? max : v;
 }

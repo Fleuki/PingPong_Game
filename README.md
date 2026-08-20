@@ -19,6 +19,18 @@ npx http-server -p 8080 .
 
 Отладочный режим: `index.html?debug` — кладёт состояние игры в `window.__game`.
 
+Сборка в один файл (нужна только для превью по ссылке, на Яндекс Игры загружаются
+обычные файлы репозитория):
+
+```
+node tools/bundle.mjs            # dist/krucheny-udar.html
+node tools/bundle.mjs --no-sdk   # то же без внешнего скрипта SDK
+```
+
+Онлайн-проверка через GitHub Pages: Settings → Pages → Source: Deploy from a branch →
+ветка `main`, папка `/ (root)`. Игра откроется по адресу
+`https://fleuki.github.io/PingPong_Game/`.
+
 ## Структура
 
 | Файл | Назначение |
@@ -37,6 +49,7 @@ npx http-server -p 8080 .
 | `src/storage.js` | прогресс: облако + `localStorage` |
 | `src/main.js` | точка входа и игровой цикл |
 | `promo/promo.html` | служебная страница: рисует иконку 512×512 и обложку 800×470 |
+| `tools/bundle.mjs` | сборка всей игры в один HTML-файл (для превью по ссылке) |
 
 ## Физика
 
