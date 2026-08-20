@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Кручёный удар — материалы для черновика</title>
+<style>
+  body { margin: 0; padding: 24px; background: #f6f2e8; color: #101010;
+         font-family: "Trebuchet MS", Arial, sans-serif; }
+  h1 { font-size: 20px; }
+  p { max-width: 720px; line-height: 1.5; }
+  .item { margin: 24px 0; }
+  canvas { border: 2px solid #101010; max-width: 100%; height: auto; background: #fff; }
+  a.dl { display: inline-block; margin-top: 8px; padding: 8px 14px; background: #6ed22e;
+         border: 3px solid #101010; border-radius: 10px; color: #101010;
+         font-weight: bold; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>Материалы для черновика: «Кручёный удар»</h1>
+<p>Служебная страница, в сборку игры не входит. Открыть в браузере и сохранить оба PNG.
+Иконка — 512×512, обложка — 800×470 (раздел 2.3 справочника по публикации).
+Название на обложке совпадает со строкой в игре и в поле «Название» — требование 5.1.3.</p>
+
+<div class="item">
+  <div><canvas id="icon" width="512" height="512"></canvas></div>
+  <a class="dl" id="dl-icon" download="icon-512.png">Скачать иконку 512×512</a>
+</div>
+
+<div class="item">
+  <div><canvas id="cover" width="800" height="470"></canvas></div>
+  <a class="dl" id="dl-cover" download="cover-800x470.png">Скачать обложку 800×470</a>
+</div>
+
+<script>
+const C = {
+  bg: '#f2c662', table: '#6ed22e', ink: '#101010', line: '#ffffff',
+  player: '#ef4050', ai: '#23d3f5',
+};
+const TITLE = 'Кручёный удар';
+
+function roundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function paddle(ctx, x, y, r, color, dir) {
+  const o = r * 0.19;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.lineWidth = o;
+  ctx.strokeStyle = C.ink;
+  ctx.lineJoin = 'round';
+
+  const hw = r * 0.32, hl = r * 1.15;
+  ctx.fillStyle = color;
+  roundedRect(ctx, -hw / 2, dir > 0 ? r * 0.45 : -r * 0.45 - hl, hw, hl, hw * 0.25);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.save();
+  ctx.clip();
+  const edge = -dir * r * 0.66;
+  ctx.fillStyle = C.line;
+  if (dir > 0) ctx.fillRect(-r, -r, r * 2, r + edge);
+  else ctx.fillRect(-r, edge, r * 2, r - edge);
+  ctx.restore();
+  ctx.lineWidth = o * 0.7;
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.84, edge);
+  ctx.lineTo(r * 0.84, edge);
+  ctx.stroke();
+  ctx.lineWidth = o;
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function ball(ctx, x, y, r) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = C.line;
+  ctx.fill();
+  ctx.lineWidth = r * 0.36;
+  ctx.strokeStyle = C.ink;
+  ctx.stroke();
+}
+
+function table(ctx, x, y, w, h, o) {
+  ctx.fillStyle = C.table;
+  ctx.fillRect(x, y, w, h);
+  ctx.lineWidth = o;
+  ctx.strokeStyle = C.ink;
+  ctx.strokeRect(x, y, w, h);
+  ctx.fillStyle = C.line;
+  ctx.fillRect(x + w / 2 - o * 0.22, y + o / 2, o * 0.44, h - o);
+  ctx.fillRect(x + o / 2, y + h / 2 - o * 0.36, w - o, o * 0.72);
+  ctx.fillStyle = C.ink;
+  ctx.fillRect(x + o / 2, y + h / 2 - o * 0.08, w - o, o * 0.16);
+}
+
+function drawIcon() {
+  const ctx = document.getElementById('icon').getContext('2d');
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, 512, 512);
+  table(ctx, 112, 74, 288, 364, 20);
+  ctx.fillStyle = 'rgba(0,0,0,0.16)';
+  ctx.beginPath(); ctx.arc(202, 152, 68, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(322, 386, 68, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(268, 268, 32, 0, Math.PI * 2); ctx.fill();
+  paddle(ctx, 190, 140, 68, C.ai, -1);
+  paddle(ctx, 310, 374, 68, C.player, 1);
+  ball(ctx, 256, 256, 32);
+  return ctx.canvas;
+}
+
+function drawCover() {
+  const ctx = document.getElementById('cover').getContext('2d');
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, 800, 470);
+  ctx.save();
+  ctx.translate(600, 235);
+  ctx.rotate(-0.12);
+  table(ctx, -130, -190, 260, 380, 18);
+  ctx.fillStyle = 'rgba(0,0,0,0.16)';
+  ctx.beginPath(); ctx.arc(30, 10, 26, 0, Math.PI * 2); ctx.fill();
+  paddle(ctx, -50, -150, 62, C.ai, -1);
+  paddle(ctx, 40, 150, 62, C.player, 1);
+  ball(ctx, 18, 0, 26);
+  ctx.restore();
+
+  ctx.fillStyle = C.ink;
+  ctx.font = 'bold 62px "Trebuchet MS", Arial, sans-serif';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('КРУЧЁНЫЙ', 48, 210);
+  ctx.fillText('УДАР', 48, 278);
+  ctx.font = 'bold 24px "Trebuchet MS", Arial, sans-serif';
+  ctx.fillStyle = '#3a3a3a';
+  ctx.fillText('Настольный теннис', 48, 326);
+  ctx.fillText('с подкруткой', 48, 356);
+  return ctx.canvas;
+}
+
+drawIcon();
+drawCover();
+document.getElementById('dl-icon').href = document.getElementById('icon').toDataURL('image/png');
+document.getElementById('dl-cover').href = document.getElementById('cover').toDataURL('image/png');
+console.log('Название на обложке:', TITLE);
+</script>
+</body>
+</html>

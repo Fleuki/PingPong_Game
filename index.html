@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="Кручёный удар — аркадный настольный теннис: подкрутка, разгон мяча и три уровня сложности.">
+<title>Кручёный удар</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://yandex.ru/games/sdk/v2"></script>
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- Экраны интерфейса. Тексты подставляются из src/i18n.js по data-i18n. -->
+  <div id="screens">
+
+    <section class="screen" id="screen-menu" hidden>
+      <div class="panel">
+        <h1 class="game-title" data-i18n="title">Кручёный удар</h1>
+        <p class="tagline" data-i18n="tagline"></p>
+        <button class="btn btn-primary" id="btn-play" data-i18n="play"></button>
+        <p class="label" data-i18n="difficulty"></p>
+        <div class="row" id="difficulty-row">
+          <button class="btn btn-choice" data-difficulty="easy" data-i18n="diffEasy"></button>
+          <button class="btn btn-choice" data-difficulty="normal" data-i18n="diffNormal"></button>
+          <button class="btn btn-choice" data-difficulty="hard" data-i18n="diffHard"></button>
+        </div>
+        <button class="btn" id="btn-howto" data-i18n="howto"></button>
+        <button class="btn" id="btn-sound"></button>
+        <p class="stats" id="menu-stats"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-howto" hidden>
+      <div class="panel">
+        <h2 data-i18n="howtoTitle"></h2>
+        <p class="text" data-i18n="howtoBody"></p>
+        <button class="btn btn-primary" id="btn-howto-back" data-i18n="back"></button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-pause" hidden>
+      <div class="panel">
+        <h2 data-i18n="pauseTitle"></h2>
+        <button class="btn btn-primary" id="btn-resume" data-i18n="resume"></button>
+        <button class="btn" id="btn-restart" data-i18n="restart"></button>
+        <button class="btn" id="btn-tomenu" data-i18n="toMenu"></button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-over" hidden>
+      <div class="panel">
+        <h2 id="over-title"></h2>
+        <p class="score-line" id="over-score"></p>
+        <p class="stats" id="over-stats"></p>
+        <button class="btn btn-reward" id="btn-reward" hidden data-i18n="rewardBtn"></button>
+        <button class="btn btn-primary" id="btn-again" data-i18n="again"></button>
+        <button class="btn" id="btn-over-menu" data-i18n="toMenu"></button>
+      </div>
+    </section>
+
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
